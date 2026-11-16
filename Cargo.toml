@@ -6,9 +6,10 @@ rust-version = "1.95"
 license = "MIT OR Apache-2.0"
 publish = false
 description = "Typed identity conversion between Agora artifact references and Vellum documents"
+repository = "https://github.com/gantbd/agora-vellum-adapter"
 
 [dependencies]
-agora-protocol = { path = "../agora/crates/agora-protocol" }
+agora-protocol = { path = "../agora/protocol/agora-protocol" }
 vellum-protocol = { path = "../vellum/protocol/vellum-protocol" }
 
 [workspace]

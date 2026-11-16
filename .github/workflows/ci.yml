@@ -1,0 +1,43 @@
+name: Coordinated source qualification
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: agora-vellum-adapter-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  rust:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check out adapter
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          path: agora-vellum-adapter
+          persist-credentials: false
+      - name: Check out exact Agora dependency
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: gantbd/agora
+          ref: 982f26afc36f2657777036e1e2d9d4bd45d1a8b5
+          path: agora
+          persist-credentials: false
+      - name: Check out exact Vellum dependency
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: gantbd/vellum
+          ref: 418f4eeb5522309d9245b6d455085bac5cd1f8cd
+          path: vellum
+          persist-credentials: false
+      - name: Qualify locked adapter
+        working-directory: agora-vellum-adapter
+        run: |
+          cargo fetch --locked
+          make check
